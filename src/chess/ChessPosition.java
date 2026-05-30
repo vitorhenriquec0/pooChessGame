@@ -29,7 +29,7 @@ public class ChessPosition {
             throw new IllegalArgumentException("Erro: Posicao valida deve ter 2 caracteres, como 'e2'.");
         }
 
-        char column = s.charAt(0);
+        char column = Character.toLowerCase(s.charAt(0));
         int row = Character.getNumericValue(s.charAt(1));
 
         return new ChessPosition(column, row);
