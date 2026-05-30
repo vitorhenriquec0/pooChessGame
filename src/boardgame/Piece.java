@@ -4,7 +4,9 @@ import chess.Color;
 import chess.PieceType;
 
 public abstract class Piece {
+
     protected Position position;
+
     private Color color;
     private PieceType type;
     private Board board;
@@ -28,31 +30,75 @@ public abstract class Piece {
         return board;
     }
 
-    protected void setPosition(Position position) {
+    public Position getPosition() {
+        return position;
+    }
+
+    // precisa ser public para o Board conseguir chamar
+    public void setPosition(Position position) {
         this.position = position;
+    }
+
+    // usado pelas classes das peças
+    protected boolean isThereOpponentPiece(Position position) {
+        Piece p = board.piece(position);
+
+        return p != null &&
+               p.getColor() != this.color;
     }
 
     public abstract boolean[][] possibleMoves();
 
-    // verifica se uma pos especifica é um movimento valido
     public boolean possibleMove(Position position) {
-        // chama a matriz do metodo abstrato (pessoa 2 precisa implementar dps)
+
         boolean[][] mat = possibleMoves();
 
-        // boolean para a linha e coluna especifica
-        return mat[position.getRow()][position.getColumn()];
+        return mat[position.getRow()]
+                  [position.getColumn()];
     }
 
-    // se houver ao menos 1 movimento possivel
     public boolean isThereAnyPossibleMove() {
+
         boolean[][] mat = possibleMoves();
+
         for (int i = 0; i < mat.length; i++) {
-            for (int j = 0; j < mat.length; j++) {
+
+            for (int j = 0; j < mat[i].length; j++) {
+
                 if (mat[i][j]) {
-                    return true; // existe
+                    return true;
                 }
             }
         }
-        return false; // nao existe
+
+        return false;
+    }
+
+    @Override
+    public String toString() {
+
+        switch (type) {
+
+            case KING:
+                return "K";
+
+            case QUEEN:
+                return "Q";
+
+            case ROOK:
+                return "R";
+
+            case BISHOP:
+                return "B";
+
+            case KNIGHT:
+                return "N";
+
+            case PAWN:
+                return "P";
+
+            default:
+                return "?";
+        }
     }
 }
